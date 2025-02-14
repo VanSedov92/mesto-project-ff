@@ -9,11 +9,11 @@
 // @todo: Вывести карточки на страницу
  
 const cardsList = document.querySelector('.places__list');   
-const cardTemplate = document.querySelector('#card-template').content; 
+const cardTemplate = document.querySelector('#card-template').content.querySelector('.places__item'); 
  
 // Функция создания карточки
 function createCard(item) {
-    const cardsItem = cardTemplate.querySelector('.places__item').cloneNode(true); 
+    const cardsItem = cardTemplate.cloneNode(true); 
     cardsItem.querySelector('.card__image').src = item.link;
     cardsItem.querySelector('.card__image').alt = `Изображение места: ${item.name}`; 
     cardsItem.querySelector('.card__title').textContent = item.name;
