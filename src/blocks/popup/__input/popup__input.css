@@ -10,8 +10,20 @@
   margin-bottom: 10px;
 }
 
-.popup__input:last-of-type {
-  margin-bottom: 0;
+.popup__input_type_error {
+  border-block-end: 1px solid red;
+}
+
+.popup__input-error {
+  color: red;
+  font-size: 12px;
+  height: 12px;
+  display: block;
+  visibility: hidden;
+}
+
+.popup__input-error_active {
+  visibility: visible;
 }
 
 @media screen and (max-width: 568px) {

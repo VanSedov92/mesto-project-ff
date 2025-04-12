@@ -19,6 +19,31 @@
   cursor: pointer;
 }
 
+.popup__input_type_error {
+  border-color: red;
+}
+
+.popup__input-error {
+  color: red;
+  font-size: 12px;
+  height: 12px;
+  display: block;
+  visibility: hidden;
+}
+
+.popup__input-error_active {
+  visibility: visible;
+}
+
+.popup__button_disabled {
+  opacity: 0.2;
+  color: #000;
+  border: 1px solid #000;
+  background-color: transparent;
+  pointer-events: none;
+}
+
+
 @media screen and (max-width: 568px) {
   .popup__button {
     font-size: 14px;

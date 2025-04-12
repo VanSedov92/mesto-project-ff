@@ -1,0 +1,17 @@
+.profile__avatar-edit-button {
+  position: absolute;
+  bottom: 47px;
+  left: 47px;
+  background: url('/src/images/edit-icon.svg') no-repeat center center;
+  background-size: 20px 20px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  display: none;
+  cursor: pointer;
+}
+
+.profile__image:hover .profile__avatar-edit-button {
+  display: block;
+  transition: 0.3s;
+}
