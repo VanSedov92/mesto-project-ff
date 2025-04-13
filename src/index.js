@@ -30,10 +30,12 @@ const nameInput = editFormElement.querySelector('.popup__input_type_name');
 const jobInput = editFormElement.querySelector('.popup__input_type_description');
 const profileName = document.querySelector('.profile__title');
 const profileJob = document.querySelector('.profile__description');
+const profileSubmitButton = editFormElement.querySelector('.popup__button');
 
 const cardFormElement = document.forms['new-place'];
 const cardInputName = cardFormElement.querySelector('.popup__input_type_card-name');
 const cardInputImage = cardFormElement.querySelector('.popup__input_type_url');
+const cardSubmitButton = cardFormElement.querySelector('.popup__button');
 
 const avatarEditButton = document.querySelector('.profile__avatar-edit-button');
 const avatarPopup = document.querySelector('.popup_type_avatar');
