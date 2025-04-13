@@ -28,7 +28,7 @@ export function closePopupOverlay(evt) {
   }
 }
 
-export function popupListeners() {
+export function setClosePopupListeners() {
   const popupCloseButtons = document.querySelectorAll('.popup__close');
   popupCloseButtons.forEach((button) => {
     button.addEventListener('click', (evt) => {

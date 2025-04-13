@@ -1,8 +1,18 @@
 import './pages/index.css';
 import { createCard } from './components/card.js';
-import { openPopup, closePopup, popupListeners } from './components/modal.js';
+import { openPopup, closePopup, setClosePopupListeners } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
 import { getCurrentUser, getInitialCards, addCard, updateProfile, likeCard, unlikeCard, deleteCard, updateAvatar} from './components/api.js';
+
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  inputErrorActiveClass: 'popup__input-error_active',
+  errorClass: 'popup__error_visible'
+};
 
 const cardsList = document.querySelector('.places__list');
 const popupNewCard = document.querySelector('.popup_type_new-card');
@@ -31,6 +41,8 @@ const avatarPopupCloseButton = avatarPopup.querySelector('.popup__close');
 const avatarFormElement = document.forms['avatar-form'];
 const avatarInput = avatarFormElement.querySelector('.popup__input_type_avatar');
 const profileAvatar = document.querySelector('.profile__image');
+
+let cardSubmittedSuccessfully = false;
 
 avatarPopupCloseButton.addEventListener('click', () => closePopup(avatarPopup));
 
@@ -80,33 +92,22 @@ getCurrentUser()
   })
   .catch(err => console.log('Ошибка при получении данных пользователя', err));
 
-getCurrentUser()
-popupListeners();
+
+setClosePopupListeners();
 
 profileEditButton.addEventListener('click', () => {
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
-  clearValidation(editFormElement, {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-  });
+  clearValidation(editFormElement, validationConfig);
   openPopup(popupEdit);
 });
 
 profileAddButton.addEventListener('click', () => {
-  cardFormElement.reset();
-  clearValidation(cardFormElement, {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-  });
+  if (cardSubmittedSuccessfully) {
+    cardFormElement.reset();
+    clearValidation(cardFormElement, validationConfig);
+    cardSubmittedSuccessfully = false;
+  }
   openPopup(popupNewCard);
 });
 
@@ -120,7 +121,10 @@ function handleFormSubmitCard(evt) {
     .then((newCard) => {
       const cardElement = createCard(newCard, removeCardHandler, likeHandler, handleOpenImage, currentUserId);
       cardsList.prepend(cardElement);
+      
+      cardSubmittedSuccessfully = true;
       cardFormElement.reset();
+      clearValidation(cardFormElement, validationConfig);
       closePopup(popupNewCard);
     })
     .catch((err) => console.log(err));
@@ -159,11 +163,4 @@ function removeCardHandler(cardId, cardElement) {
     .catch((err) => console.log(err));
 }
 
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  inputErrorActiveClass: 'popup__input-error_active'
-});
+enableValidation(validationConfig);

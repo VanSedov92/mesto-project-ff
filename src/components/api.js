@@ -10,21 +10,15 @@ export const getCurrentUser = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
-    .then(handleResponse)
-    .catch(err => console.log(err));
+    .then(handleResponse);
 };
 
 export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
+    .then(handleResponse);
+};
 
 export const addCard = (name, link) => {
   return fetch(`${config.baseUrl}/cards`, {
