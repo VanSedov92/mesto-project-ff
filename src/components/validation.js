@@ -12,16 +12,18 @@ const hideInputError = (formElement, inputElement, config) => {
   errorElement.classList.remove(config.inputErrorActiveClass);
 };
 
-const checkInputValidity = (formElement, inputElement, config) => {
+const isCustomPatternValid = (inputElement) => {
   const pattern = /^[a-zA-Zа-яА-ЯёЁ\s\-]+$/;
+  const nameList = ['name', 'description', 'place-name'];
+  return !nameList.includes(inputElement.name) || pattern.test(inputElement.value);
+};
+
+const checkInputValidity = (formElement, inputElement, config) => {
   const errorMessage = inputElement.dataset.errorMessage;
 
   if (!inputElement.validity.valid) {
     showInputError(formElement, inputElement, inputElement.validationMessage, config);
-  } else if (
-    (inputElement.name === 'name' || inputElement.name === 'description') || inputElement.name === 'place-name' &&
-    !pattern.test(inputElement.value)
-  ) {
+  } else if (!isCustomPatternValid(inputElement)) {
     showInputError(formElement, inputElement, errorMessage, config);
   } else {
     hideInputError(formElement, inputElement, config);
@@ -29,18 +31,12 @@ const checkInputValidity = (formElement, inputElement, config) => {
 };
 
 const hasInvalidInput = (inputList) => {
-  const pattern = /^[a-zA-Zа-яА-ЯёЁ\s\-]+$/;
-
   return inputList.some((inputElement) => {
-    if (
-      (inputElement.name === 'name' ||
-       inputElement.name === 'description' ||
-       inputElement.name === 'place-name') &&
-      !pattern.test(inputElement.value)
-    ) {
-      return true;
-    }
-    return !inputElement.validity.valid;
+    return (
+      !inputElement.validity.valid ||
+      !isCustomPatternValid(inputElement) ||
+      inputElement.value.trim() === ''
+    );
   });
 };
 
@@ -85,9 +81,7 @@ const clearValidation = (formElement, config) => {
   inputList.forEach((inputElement) => {
     hideInputError(formElement, inputElement, config);
   });
-
-  buttonElement.disabled = true;
-  buttonElement.classList.add(config.inactiveButtonClass);
+  toggleButtonState(inputList, buttonElement, config);
 };
 
 export { enableValidation, clearValidation };

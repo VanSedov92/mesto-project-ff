@@ -41,8 +41,13 @@ const avatarPopupCloseButton = avatarPopup.querySelector('.popup__close');
 const avatarFormElement = document.forms['avatar-form'];
 const avatarInput = avatarFormElement.querySelector('.popup__input_type_avatar');
 const profileAvatar = document.querySelector('.profile__image');
+const avatarSubmitButton = avatarFormElement.querySelector('.popup__button');
 
 let cardSubmittedSuccessfully = false;
+
+function setButtonLoading(button, isLoading, text = 'Сохранить') {
+  button.textContent = isLoading ? 'Сохранение...' : text;
+}
 
 avatarPopupCloseButton.addEventListener('click', () => closePopup(avatarPopup));
 
@@ -56,6 +61,7 @@ function handleFormSubmitAvatar(evt) {
   evt.preventDefault();
 
   const newAvatarUrl = avatarInput.value;
+  setButtonLoading(avatarSubmitButton, true);
 
   updateAvatar(newAvatarUrl)
     .then((res) => {
@@ -63,7 +69,8 @@ function handleFormSubmitAvatar(evt) {
       avatarFormElement.reset();
       closePopup(avatarPopup);
     })
-    .catch((err) => console.log('Ошибка при обновлении аватара:', err));
+    .catch((err) => console.log('Ошибка при обновлении аватара:', err))
+    .finally(() => setButtonLoading(avatarSubmitButton, false));
 }
 
 avatarFormElement.addEventListener('submit', handleFormSubmitAvatar);
@@ -117,6 +124,8 @@ function handleFormSubmitCard(evt) {
   const titleValue = cardInputName.value;
   const urlValue = cardInputImage.value;
 
+  setButtonLoading(cardSubmitButton, true);
+
   addCard(titleValue, urlValue)
     .then((newCard) => {
       const cardElement = createCard(newCard, removeCardHandler, likeHandler, handleOpenImage, currentUserId);
@@ -127,7 +136,8 @@ function handleFormSubmitCard(evt) {
       clearValidation(cardFormElement, validationConfig);
       closePopup(popupNewCard);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err))
+    .finally(() => setButtonLoading(cardSubmitButton, false));
 }
 
 cardFormElement.addEventListener('submit', handleFormSubmitCard);
@@ -138,13 +148,17 @@ function handleFormSubmitProfile(evt) {
   const nameValue = nameInput.value;
   const jobValue = jobInput.value;
 
+  setButtonLoading(profileSubmitButton, true);
+
   updateProfile(nameValue, jobValue)
     .then((res) => {
       profileName.textContent = res.name;
       profileJob.textContent = res.about;
       closePopup(popupEdit);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err))
+    .finally(() => setButtonLoading(profileSubmitButton, false));
+
 }
 
 editFormElement.addEventListener('submit', handleFormSubmitProfile);
